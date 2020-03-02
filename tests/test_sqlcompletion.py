@@ -1,4 +1,4 @@
-from sqlcomplete.packages.sqlcompletion import (
+from sqlcomplete.sqlcompletion import (
     suggest_type,
     Special,
     Database,
@@ -14,7 +14,7 @@ from sqlcomplete.packages.sqlcompletion import (
     JoinCondition,
     Join,
 )
-from sqlcomplete.packages.parseutils.tables import TableReference
+from sqlcomplete.parseutils import TableReference
 import pytest
 
 

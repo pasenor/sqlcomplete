@@ -4,7 +4,7 @@ import re
 import sqlparse
 from sqlparse.tokens import Name
 from collections import defaultdict
-from .pgliterals.main import get_literals
+from sqlcomplete.pgliterals.main import get_literals
 
 
 white_space_regex = re.compile("\\s+", re.MULTILINE)

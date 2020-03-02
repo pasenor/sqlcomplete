@@ -1,5 +1,5 @@
 import pytest
-from sqlcomplete.packages.sqlcompletion import (
+from sqlcomplete.sqlcompletion import (
     suggest_type,
     Special,
     Database,

@@ -1,6 +1,6 @@
 import pytest
-from sqlcomplete.packages.parseutils.tables import extract_tables
-from sqlcomplete.packages.parseutils.utils import find_prev_keyword, is_open_quote
+from sqlcomplete.parseutils import extract_tables
+from sqlcomplete.parseutils import find_prev_keyword, is_open_quote
 
 
 def test_empty_string():

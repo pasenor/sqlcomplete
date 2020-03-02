@@ -1,4 +1,4 @@
-from sqlcomplete.packages.prioritization import PrevalenceCounter
+from sqlcomplete.prioritization import PrevalenceCounter
 
 
 def test_prevalence_counter():

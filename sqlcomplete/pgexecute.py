@@ -8,7 +8,7 @@ import sqlparse
 import pgspecial as special
 import select
 from psycopg2.extensions import POLL_OK, POLL_READ, POLL_WRITE, make_dsn
-from .packages.parseutils.meta import FunctionMetadata, ForeignKey
+from sqlcomplete.parseutils import FunctionMetadata, ForeignKey
 from .encodingutils import unicode2utf8, PY2, utf8tounicode
 
 _logger = logging.getLogger(__name__)

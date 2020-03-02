@@ -4,7 +4,7 @@ import logging
 from prompt_toolkit.enums import DEFAULT_BUFFER
 from prompt_toolkit.filters import Condition
 from prompt_toolkit.application import get_app
-from .packages.parseutils.utils import is_open_quote
+from sqlcomplete.parseutils import is_open_quote
 
 _logger = logging.getLogger(__name__)
 

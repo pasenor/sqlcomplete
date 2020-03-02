@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from functools import partial
 from itertools import product
-from sqlcomplete.packages.parseutils.meta import FunctionMetadata, ForeignKey
+from sqlcomplete.parseutils import FunctionMetadata, ForeignKey
 from prompt_toolkit.completion import Completion
 from prompt_toolkit.document import Document
 from mock import Mock

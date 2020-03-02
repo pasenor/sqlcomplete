@@ -3,7 +3,7 @@
 
 import click
 
-from sqlcomplete.packages.prompt_utils import confirm_destructive_query
+from sqlcomplete.prompt_utils import confirm_destructive_query
 
 
 def test_confirm_destructive_query_notty():

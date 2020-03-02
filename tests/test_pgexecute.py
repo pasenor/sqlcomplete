@@ -10,7 +10,7 @@ from pgspecial.main import PGSpecial, NO_QUERY
 from utils import run, dbtest, requires_json, requires_jsonb
 
 from sqlcomplete.main import PGCli
-from sqlcomplete.packages.parseutils.meta import FunctionMetadata
+from sqlcomplete.parseutils import FunctionMetadata
 
 
 def function_meta_data(

@@ -1,14 +1,14 @@
 from __future__ import print_function, unicode_literals
 import logging
 import re
-from itertools import count, repeat, chain
+from itertools import count, chain
 import operator
 from collections import namedtuple, defaultdict, OrderedDict
 from cli_helpers.tabular_output import TabularOutputFormatter
 from pgspecial.namedqueries import NamedQueries
 from prompt_toolkit.completion import Completer, Completion, PathCompleter
 from prompt_toolkit.document import Document
-from .packages.sqlcompletion import (
+from sqlcomplete.sqlcompletion import (
     FromClauseItem,
     suggest_type,
     Special,
@@ -27,12 +27,11 @@ from .packages.sqlcompletion import (
     JoinCondition,
     Join,
 )
-from .packages.parseutils.meta import ColumnMetadata, ForeignKey
-from .packages.parseutils.utils import last_word
-from .packages.parseutils.tables import TableReference
-from .packages.pgliterals.main import get_literals
-from .packages.prioritization import PrevalenceCounter
-from .config import load_config, config_location
+from sqlcomplete.parseutils import ColumnMetadata, ForeignKey
+from sqlcomplete.parseutils import last_word
+from sqlcomplete.parseutils import TableReference
+from sqlcomplete.pgliterals.main import get_literals
+from sqlcomplete.prioritization import PrevalenceCounter
 
 _logger = logging.getLogger(__name__)
 

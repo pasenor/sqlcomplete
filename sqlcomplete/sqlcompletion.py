@@ -5,9 +5,9 @@ import re
 import sqlparse
 from collections import namedtuple
 from sqlparse.sql import Comparison, Identifier, Where
-from .parseutils.utils import last_word, find_prev_keyword, parse_partial_identifier
-from .parseutils.tables import extract_tables
-from .parseutils.ctes import isolate_query_ctes
+from sqlcomplete.parseutils import last_word, find_prev_keyword, parse_partial_identifier
+from sqlcomplete.parseutils import extract_tables
+from sqlcomplete.parseutils import isolate_query_ctes
 from pgspecial.main import parse_special_command
 
 PY2 = sys.version_info[0] == 2

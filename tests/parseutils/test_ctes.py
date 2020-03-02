@@ -1,6 +1,6 @@
 import pytest
 from sqlparse import parse
-from sqlcomplete.packages.parseutils.ctes import (
+from sqlcomplete.parseutils import (
     token_start_pos,
     extract_ctes,
     extract_column_names as _extract_column_names,

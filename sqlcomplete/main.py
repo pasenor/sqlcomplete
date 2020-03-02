@@ -65,7 +65,7 @@ from .config import (
 from .key_bindings import pgcli_bindings
 from .encodingutils import utf8tounicode
 from .encodingutils import text_type
-from .packages.prompt_utils import confirm_destructive_query
+from sqlcomplete.prompt_utils import confirm_destructive_query
 from .__init__ import __version__
 
 click.disable_unicode_literals_warning = True
