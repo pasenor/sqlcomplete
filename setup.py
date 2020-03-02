@@ -33,7 +33,7 @@ setup(
     license="BSD",
     url="http://pgcli.com",
     packages=find_packages(),
-    package_data={"sqlcomplete": ["pgclirc", "packages/pgliterals/pgliterals.json"]},
+    package_data={"sqlcomplete": ["pgclirc", "packages/sql_literals/sql_literals.json"]},
     description=description,
     long_description=open("README.rst").read(),
     install_requires=install_requirements,

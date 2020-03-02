@@ -30,7 +30,7 @@ from sqlcomplete.sqlcompletion import (
 from sqlcomplete.parseutils import ColumnMetadata, ForeignKey
 from sqlcomplete.parseutils import last_word
 from sqlcomplete.parseutils import TableReference
-from sqlcomplete.pgliterals.main import get_literals
+from sqlcomplete.sql_literals.main import get_literals
 from sqlcomplete.prioritization import PrevalenceCounter
 
 _logger = logging.getLogger(__name__)
