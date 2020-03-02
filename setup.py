@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 from sqlcomplete import __version__
 
-description = "CLI for Postgres Database. With auto-completion and syntax highlighting."
+description = "SQL Completion Engine"
 
 install_requirements = [
     "pgspecial>=1.11.8",
@@ -27,21 +27,17 @@ if platform.system() != "Windows" and not platform.system().startswith("CYGWIN")
 
 setup(
     name="sqlcomplete",
-    author="Pgcli Core Team",
-    author_email="sqlcomplete-dev@googlegroups.com",
+    author="DBCLI Core Team",
+    author_email="pgcli-dev@googlegroups.com",
     version=__version__,
     license="BSD",
-    url="http://pgcli.com",
+    url="http://dbcli.com",
     packages=find_packages(),
-    package_data={"sqlcomplete": ["pgclirc", "packages/sql_literals/sql_literals.json"]},
+    package_data={"sqlcomplete": ["sql_literals/sql_literals.json"]},
     description=description,
-    long_description=open("README.rst").read(),
+    long_description=open("README.md").read(),
     install_requires=install_requirements,
     extras_require={"keyring": ["keyring >= 12.2.0"]},
-    entry_points="""
-        [console_scripts]
-        sqlcomplete=sqlcomplete.main:cli
-    """,
     classifiers=[
         "Intended Audience :: Developers",
         "License :: OSI Approved :: BSD License",

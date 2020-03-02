@@ -14,7 +14,7 @@ from sqlcomplete.sqlcompletion import (
     JoinCondition,
     Join,
 )
-from sqlcomplete.parseutils import TableReference
+from sqlcomplete.parseutils.tables import TableReference
 import pytest
 
 
