@@ -1,4 +1,6 @@
 import pytest
+
+from sqlcomplete.parseutils import query_has_where_clause, is_destructive
 from sqlcomplete.parseutils.tables import extract_tables
 from sqlcomplete.parseutils.utils import find_prev_keyword, is_open_quote
 
@@ -267,3 +269,32 @@ def test_is_open_quote__closed(sql):
 )
 def test_is_open_quote__open(sql):
     assert is_open_quote(sql)
+
+
+def test_is_destructive_update_with_where_clause():
+    sql = (
+        'use test;\n'
+        'show databases;\n'
+        'UPDATE test SET x = 1 WHERE id = 1;'
+    )
+    assert is_destructive(sql) is False
+
+
+def test_is_destructive_update_without_where_clause():
+    sql = (
+        'use test;\n'
+        'show databases;\n'
+        'UPDATE test SET x = 1;'
+    )
+    assert is_destructive(sql) is True
+
+
+@pytest.mark.parametrize(
+    ('sql', 'has_where_clause'),
+    [
+        ('update test set dummy = 1;', False),
+        ('update test set dummy = 1 where id = 1);', True),
+    ],
+)
+def test_query_has_where_clause(sql, has_where_clause):
+    assert query_has_where_clause(sql) is has_where_clause
