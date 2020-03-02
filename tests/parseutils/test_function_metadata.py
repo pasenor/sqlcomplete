@@ -1,4 +1,4 @@
-from sqlcomplete.parseutils import FunctionMetadata
+from sqlcomplete.parseutils.meta import FunctionMetadata
 
 
 def test_function_metadata_eq():
