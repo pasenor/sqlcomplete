@@ -273,7 +273,7 @@ class PGCli(object):
             self.quit,
             "\\q",
             "\\q",
-            "Quit pgcli.",
+            "Quit sqlcomplete.",
             arg_type=NO_QUERY,
             case_sensitive=True,
             aliases=(":q",),
@@ -282,7 +282,7 @@ class PGCli(object):
             self.quit,
             "quit",
             "quit",
-            "Quit pgcli.",
+            "Quit sqlcomplete.",
             arg_type=NO_QUERY,
             case_sensitive=False,
             aliases=("exit",),
@@ -448,11 +448,11 @@ class PGCli(object):
 
         handler.setFormatter(formatter)
 
-        root_logger = logging.getLogger("pgcli")
+        root_logger = logging.getLogger("sqlcomplete")
         root_logger.addHandler(handler)
         root_logger.setLevel(log_level)
 
-        root_logger.debug("Initializing pgcli logging.")
+        root_logger.debug("Initializing sqlcomplete logging.")
         root_logger.debug("Log file %r.", log_file)
 
         pgspecial_logger = logging.getLogger("pgspecial")
@@ -492,7 +492,7 @@ class PGCli(object):
         if not database:
             database = user
 
-        kwargs.setdefault("application_name", "pgcli")
+        kwargs.setdefault("application_name", "sqlcomplete")
 
         # If password prompt is not forced but no password is provided, try
         # getting it from environment variable.
@@ -513,7 +513,7 @@ class PGCli(object):
         if not passwd and keyring:
 
             try:
-                passwd = keyring.get_password("pgcli", key)
+                passwd = keyring.get_password("sqlcomplete", key)
             except (RuntimeError, keyring.errors.InitError) as e:
                 click.secho(
                     keyring_error_message.format(
@@ -567,7 +567,7 @@ class PGCli(object):
                     raise e
             if passwd and keyring:
                 try:
-                    keyring.set_password("pgcli", key, passwd)
+                    keyring.set_password("sqlcomplete", key, passwd)
                 except (RuntimeError, keyring.errors.KeyringError) as e:
                     click.secho(
                         keyring_error_message.format(
@@ -810,7 +810,7 @@ class PGCli(object):
                 ],
                 auto_suggest=AutoSuggestFromHistory(),
                 tempfile_suffix=".sql",
-                # N.b. pgcli's multi-line mode controls submit-on-Enter (which
+                # N.b. sqlcomplete's multi-line mode controls submit-on-Enter (which
                 # overrides the default behaviour of prompt_toolkit) and is
                 # distinct from prompt_toolkit's multiline mode here, which
                 # controls layout/display of the prompt/buffer
@@ -1062,7 +1062,7 @@ class PGCli(object):
         elif self.pgspecial.pager_config == PAGER_LONG_OUTPUT:
             lines = text.split("\n")
 
-            # The last 4 lines are reserved for the pgcli menu and padding
+            # The last 4 lines are reserved for the sqlcomplete menu and padding
             if self.is_too_tall(lines) or any(self.is_too_wide(l) for l in lines):
                 click.echo_via_pager(text, color=color)
             else:
@@ -1120,7 +1120,7 @@ class PGCli(object):
     default=False,
     help="Do not use a separate connection for completions.",
 )
-@click.option("-v", "--version", is_flag=True, help="Version of pgcli.")
+@click.option("-v", "--version", is_flag=True, help="Version of sqlcomplete.")
 @click.option("-d", "--dbname", "dbname_opt", help="database name to connect to.")
 @click.option(
     "--pgclirc",

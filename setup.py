@@ -1,7 +1,7 @@
 import platform
 from setuptools import setup, find_packages
 
-from pgcli import __version__
+from sqlcomplete import __version__
 
 description = "CLI for Postgres Database. With auto-completion and syntax highlighting."
 
@@ -26,21 +26,21 @@ if platform.system() != "Windows" and not platform.system().startswith("CYGWIN")
     install_requirements.append("setproctitle >= 1.1.9")
 
 setup(
-    name="pgcli",
+    name="sqlcomplete",
     author="Pgcli Core Team",
-    author_email="pgcli-dev@googlegroups.com",
+    author_email="sqlcomplete-dev@googlegroups.com",
     version=__version__,
     license="BSD",
     url="http://pgcli.com",
     packages=find_packages(),
-    package_data={"pgcli": ["pgclirc", "packages/pgliterals/pgliterals.json"]},
+    package_data={"sqlcomplete": ["pgclirc", "packages/pgliterals/pgliterals.json"]},
     description=description,
     long_description=open("README.rst").read(),
     install_requires=install_requirements,
     extras_require={"keyring": ["keyring >= 12.2.0"]},
     entry_points="""
         [console_scripts]
-        pgcli=pgcli.main:cli
+        sqlcomplete=sqlcomplete.main:cli
     """,
     classifiers=[
         "Intended Audience :: Developers",

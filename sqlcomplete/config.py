@@ -8,9 +8,9 @@ from configobj import ConfigObj
 
 def config_location():
     if "XDG_CONFIG_HOME" in os.environ:
-        return "%s/pgcli/" % expanduser(os.environ["XDG_CONFIG_HOME"])
+        return "%s/sqlcomplete/" % expanduser(os.environ["XDG_CONFIG_HOME"])
     elif platform.system() == "Windows":
-        return os.getenv("USERPROFILE") + "\\AppData\\Local\\dbcli\\pgcli\\"
+        return os.getenv("USERPROFILE") + "\\AppData\\Local\\dbcli\\sqlcomplete\\"
     else:
         return expanduser("~/.config/pgcli/")
 
@@ -50,7 +50,7 @@ def upgrade_config(config, def_config):
 
 
 def get_config(pgclirc_file=None):
-    from pgcli import __file__ as package_root
+    from sqlcomplete import __file__ as package_root
 
     package_root = os.path.dirname(package_root)
 

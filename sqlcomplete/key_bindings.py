@@ -17,7 +17,7 @@ _logger = logging.getLogger(__name__)
 
 
 def pgcli_bindings(pgcli):
-    """Custom key bindings for pgcli."""
+    """Custom key bindings for sqlcomplete."""
     kb = KeyBindings()
 
     tab_insert_text = " " * 4

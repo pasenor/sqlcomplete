@@ -17,7 +17,7 @@ import wrappers
 
 @when("we list databases")
 def step_list_databases(context):
-    cmd = ["pgcli", "--list"]
+    cmd = ["sqlcomplete", "--list"]
     context.cmd_output = subprocess.check_output(cmd, cwd=context.package_root)
 
 
@@ -108,7 +108,7 @@ def step_send_source_command(context):
 @when("we run query to check application_name")
 def step_check_application_name(context):
     context.cli.sendline(
-        "SELECT 'found' FROM pg_stat_activity WHERE application_name = 'pgcli' HAVING COUNT(*) > 0;"
+        "SELECT 'found' FROM pg_stat_activity WHERE application_name = 'sqlcomplete' HAVING COUNT(*) > 0;"
     )
 
 

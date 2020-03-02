@@ -7,18 +7,18 @@ _logger = logging.getLogger(__name__)
 
 
 def load_ipython_extension(ipython):
-    """This is called via the ipython command '%load_ext pgcli.magic'"""
+    """This is called via the ipython command '%load_ext sqlcomplete.magic'"""
 
     # first, load the sql magic if it isn't already loaded
     if not ipython.find_line_magic("sql"):
         ipython.run_line_magic("load_ext", "sql")
 
     # register our own magic
-    ipython.register_magic_function(pgcli_line_magic, "line", "pgcli")
+    ipython.register_magic_function(pgcli_line_magic, "line", "sqlcomplete")
 
 
 def pgcli_line_magic(line):
-    _logger.debug("pgcli magic called: %r", line)
+    _logger.debug("sqlcomplete magic called: %r", line)
     parsed = sql.parse.parse(line, {})
     # "get" was renamed to "set" in ipython-sql:
     # https://github.com/catherinedevlin/ipython-sql/commit/f4283c65aaf68f961e84019e8b939e4a3c501d43
@@ -28,16 +28,16 @@ def pgcli_line_magic(line):
         conn = sql.connection.Connection.set(parsed["connection"])
 
     try:
-        # A corresponding pgcli object already exists
+        # A corresponding sqlcomplete object already exists
         pgcli = conn._pgcli
-        _logger.debug("Reusing existing pgcli")
+        _logger.debug("Reusing existing sqlcomplete")
     except AttributeError:
         # I can't figure out how to get the underylying psycopg2 connection
         # from the sqlalchemy connection, so just grab the url and make a
         # new connection
         pgcli = PGCli()
         u = conn.session.engine.url
-        _logger.debug("New pgcli: %r", str(u))
+        _logger.debug("New sqlcomplete: %r", str(u))
 
         pgcli.connect(u.database, u.host, u.username, u.port, u.password)
         conn._pgcli = pgcli

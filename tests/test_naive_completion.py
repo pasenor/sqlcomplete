@@ -7,7 +7,7 @@ from utils import completions_to_set
 
 @pytest.fixture
 def completer():
-    import pgcli.pgcompleter as pgcompleter
+    import sqlcomplete.pgcompleter as pgcompleter
 
     return pgcompleter.PGCompleter(smart_completion=False)
 

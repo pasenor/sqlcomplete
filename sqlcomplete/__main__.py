@@ -1,5 +1,5 @@
 """
-pgcli package main entry point
+sqlcomplete package main entry point
 """
 
 from .main import cli

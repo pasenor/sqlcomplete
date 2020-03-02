@@ -11,7 +11,7 @@ from utils import (
     db_connection,
     drop_tables,
 )
-import pgcli.pgexecute
+import sqlcomplete.pgexecute
 
 
 @pytest.yield_fixture(scope="function")
@@ -32,7 +32,7 @@ def cursor(connection):
 
 @pytest.fixture
 def executor(connection):
-    return pgcli.pgexecute.PGExecute(
+    return sqlcomplete.pgexecute.PGExecute(
         database="_test_db",
         user=POSTGRES_USER,
         host=POSTGRES_HOST,

@@ -11,14 +11,14 @@ try:
 except ImportError:
     setproctitle = None
 
-from pgcli.main import (
+from sqlcomplete.main import (
     obfuscate_process_password,
     format_output,
     PGCli,
     OutputSettings,
     COLOR_CODE_REGEX,
 )
-from pgcli.pgexecute import PGExecute
+from sqlcomplete.pgexecute import PGExecute
 from pgspecial.main import PAGER_OFF, PAGER_LONG_OUTPUT, PAGER_ALWAYS
 from utils import dbtest, run
 from collections import namedtuple
@@ -29,28 +29,28 @@ from collections import namedtuple
 def test_obfuscate_process_password():
     original_title = setproctitle.getproctitle()
 
-    setproctitle.setproctitle("pgcli user=root password=secret host=localhost")
+    setproctitle.setproctitle("sqlcomplete user=root password=secret host=localhost")
     obfuscate_process_password()
     title = setproctitle.getproctitle()
-    expected = "pgcli user=root password=xxxx host=localhost"
+    expected = "sqlcomplete user=root password=xxxx host=localhost"
     assert title == expected
 
-    setproctitle.setproctitle("pgcli user=root password=top secret host=localhost")
+    setproctitle.setproctitle("sqlcomplete user=root password=top secret host=localhost")
     obfuscate_process_password()
     title = setproctitle.getproctitle()
-    expected = "pgcli user=root password=xxxx host=localhost"
+    expected = "sqlcomplete user=root password=xxxx host=localhost"
     assert title == expected
 
-    setproctitle.setproctitle("pgcli user=root password=top secret")
+    setproctitle.setproctitle("sqlcomplete user=root password=top secret")
     obfuscate_process_password()
     title = setproctitle.getproctitle()
-    expected = "pgcli user=root password=xxxx"
+    expected = "sqlcomplete user=root password=xxxx"
     assert title == expected
 
-    setproctitle.setproctitle("pgcli postgres://root:secret@localhost/db")
+    setproctitle.setproctitle("sqlcomplete postgres://root:secret@localhost/db")
     obfuscate_process_password()
     title = setproctitle.getproctitle()
-    expected = "pgcli postgres://root:xxxx@localhost/db"
+    expected = "sqlcomplete postgres://root:xxxx@localhost/db"
     assert title == expected
 
     setproctitle.setproctitle(original_title)
@@ -166,7 +166,7 @@ test_data = [
     (10, 10, "-" * 9),
 ]
 
-# 4 lines are reserved at the bottom of the terminal for pgcli's prompt
+# 4 lines are reserved at the bottom of the terminal for sqlcomplete's prompt
 use_pager_when_on = [True, True, False, True, False, False]
 
 # Can be replaced with pytest.param once we can upgrade pytest after Python 3.4 goes EOL
@@ -184,8 +184,8 @@ test_ids = [
 def pset_pager_mocks():
     cli = PGCli()
     cli.watch_command = None
-    with mock.patch("pgcli.main.click.echo") as mock_echo, mock.patch(
-        "pgcli.main.click.echo_via_pager"
+    with mock.patch("sqlcomplete.main.click.echo") as mock_echo, mock.patch(
+        "sqlcomplete.main.click.echo_via_pager"
     ) as mock_echo_via_pager, mock.patch.object(cli, "prompt_app") as mock_app:
 
         yield cli, mock_echo, mock_echo_via_pager, mock_app

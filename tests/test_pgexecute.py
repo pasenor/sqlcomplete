@@ -9,8 +9,8 @@ from mock import patch, MagicMock
 from pgspecial.main import PGSpecial, NO_QUERY
 from utils import run, dbtest, requires_json, requires_jsonb
 
-from pgcli.main import PGCli
-from pgcli.packages.parseutils.meta import FunctionMetadata
+from sqlcomplete.main import PGCli
+from sqlcomplete.packages.parseutils.meta import FunctionMetadata
 
 
 def function_meta_data(
@@ -269,7 +269,7 @@ def test_execute_from_file_no_arg(executor, pgspecial):
 
 
 @dbtest
-@patch("pgcli.main.os")
+@patch("sqlcomplete.main.os")
 def test_execute_from_file_io_error(os, executor, pgspecial):
     """\i with an io_error returns an error."""
     # Inject an IOError.
@@ -529,7 +529,7 @@ def test_exit_without_active_connection(executor):
         quit_handler,
         "\\q",
         "\\q",
-        "Quit pgcli.",
+        "Quit sqlcomplete.",
         arg_type=NO_QUERY,
         case_sensitive=True,
         aliases=(":q",),

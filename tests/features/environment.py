@@ -64,8 +64,8 @@ def before_all(context):
                     [
                         "import coverage",
                         "coverage.process_startup()",
-                        "import pgcli.main",
-                        "pgcli.main.cli()",
+                        "import sqlcomplete.main",
+                        "sqlcomplete.main.cli()",
                     ]
                 ),
             )

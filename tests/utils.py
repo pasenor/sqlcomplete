@@ -1,8 +1,8 @@
 import pytest
 import psycopg2
 import psycopg2.extras
-from pgcli.main import format_output, OutputSettings
-from pgcli.pgexecute import register_json_typecasters
+from sqlcomplete.main import format_output, OutputSettings
+from sqlcomplete.pgexecute import register_json_typecasters
 from os import getenv
 
 POSTGRES_USER = getenv("PGUSER", "postgres")
