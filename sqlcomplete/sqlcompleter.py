@@ -5,13 +5,14 @@ from itertools import count, chain
 import operator
 from collections import namedtuple, defaultdict, OrderedDict
 from cli_helpers.tabular_output import TabularOutputFormatter
-from pgspecial.namedqueries import NamedQueries
 from prompt_toolkit.completion import Completer, Completion, PathCompleter
 from prompt_toolkit.document import Document
+from sqlcomplete.parseutils.meta import ColumnMetadata, ForeignKey
+from sqlcomplete.parseutils.tables import TableReference
+from sqlcomplete.parseutils.utils import last_word
 from sqlcomplete.sqlcompletion import (
     FromClauseItem,
     suggest_type,
-    Special,
     Database,
     Schema,
     Table,
@@ -20,16 +21,12 @@ from sqlcomplete.sqlcompletion import (
     Column,
     View,
     Keyword,
-    NamedQuery,
     Datatype,
     Alias,
     Path,
     JoinCondition,
     Join,
 )
-from sqlcomplete.parseutils import ColumnMetadata, ForeignKey
-from sqlcomplete.parseutils import last_word
-from sqlcomplete.parseutils import TableReference
 from sqlcomplete.sql_literals.main import get_literals
 from sqlcomplete.prioritization import PrevalenceCounter
 
@@ -73,7 +70,7 @@ def generate_alias(tbl):
     )
 
 
-class PGCompleter(Completer):
+class SQLCompleter(Completer):
     # keywords_tree: A dict mapping keywords to well known following keywords.
     # e.g. 'CREATE': ['TABLE', 'USER', ...],
     keywords_tree = get_literals("keywords", type_=dict)
@@ -82,10 +79,9 @@ class PGCompleter(Completer):
     datatypes = get_literals("datatypes")
     reserved_words = set(get_literals("reserved"))
 
-    def __init__(self, smart_completion=True, pgspecial=None, settings=None):
-        super(PGCompleter, self).__init__()
+    def __init__(self, smart_completion=True, settings=None):
+        super(SQLCompleter, self).__init__()
         self.smart_completion = smart_completion
-        self.pgspecial = pgspecial
         self.prioritizer = PrevalenceCounter()
         settings = settings or {}
         self.signature_arg_style = settings.get(
@@ -307,7 +303,6 @@ class PGCompleter(Completer):
 
     def reset_completions(self):
         self.databases = []
-        self.special_commands = []
         self.search_path = []
         self.dbmetadata = {"tables": {}, "views": {}, "functions": {}, "datatypes": {}}
         self.all_completions = set(self.keywords + self.functions)
@@ -899,15 +894,6 @@ class PGCompleter(Completer):
         for c in completer.get_completions(document, None):
             yield Match(completion=c, priority=(0,))
 
-    def get_special_matches(self, _, word_before_cursor):
-        if not self.pgspecial:
-            return []
-
-        commands = self.pgspecial.commands
-        cmds = commands.keys()
-        cmds = [Candidate(cmd, 0, commands[cmd].description) for cmd in cmds]
-        return self.find_matches(word_before_cursor, cmds, mode="strict")
-
     def get_datatype_matches(self, suggestion, word_before_cursor):
         # suggest custom datatypes
         types = self.populate_schema_objects(suggestion.schema, "datatypes")
@@ -924,11 +910,6 @@ class PGCompleter(Completer):
 
         return matches
 
-    def get_namedquery_matches(self, _, word_before_cursor):
-        return self.find_matches(
-            word_before_cursor, NamedQueries.instance.list(), meta="named query"
-        )
-
     suggestion_matchers = {
         FromClauseItem: get_from_clause_item_matches,
         JoinCondition: get_join_condition_matches,
@@ -942,9 +923,7 @@ class PGCompleter(Completer):
         Alias: get_alias_matches,
         Database: get_database_matches,
         Keyword: get_keyword_matches,
-        Special: get_special_matches,
         Datatype: get_datatype_matches,
-        NamedQuery: get_namedquery_matches,
         Path: get_path_matches,
     }
 
