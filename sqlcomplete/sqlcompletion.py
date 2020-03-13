@@ -146,7 +146,6 @@ def suggest_type(full_text, text_before_cursor):
     if full_text.startswith("\\i "):
         return (Path(),)
 
-    # This is a temporary hack; the exception handling
     # here should be removed once sqlparse has been fixed
     try:
         stmt = SqlStatement(full_text, text_before_cursor)
@@ -300,6 +299,8 @@ def suggest_special(text):
 
 
 def suggest_based_on_last_token(token, stmt):
+    if not token:
+        return (Keyword(), Special())
 
     if isinstance(token, string_types):
         token_v = token.lower()
@@ -336,9 +337,7 @@ def suggest_based_on_last_token(token, stmt):
     else:
         token_v = token.value.lower()
 
-    if not token:
-        return (Keyword(), Special())
-    elif token_v.endswith("("):
+    if token_v.endswith("("):
         p = sqlparse.parse(stmt.text_before_cursor)[0]
 
         if p.tokens and isinstance(p.tokens[-1], Where):

@@ -13,6 +13,7 @@ from sqlcomplete.parseutils.utils import last_word
 from sqlcomplete.sqlcompletion import (
     FromClauseItem,
     suggest_type,
+    Special,
     Database,
     Schema,
     Table,
@@ -21,6 +22,7 @@ from sqlcomplete.sqlcompletion import (
     Column,
     View,
     Keyword,
+    NamedQuery,
     Datatype,
     Alias,
     Path,
@@ -73,11 +75,27 @@ def generate_alias(tbl):
 class SQLCompleter(Completer):
     # keywords_tree: A dict mapping keywords to well known following keywords.
     # e.g. 'CREATE': ['TABLE', 'USER', ...],
+    name_escape_char = '"'
     keywords_tree = get_literals("keywords", type_=dict)
     keywords = tuple(set(chain(keywords_tree.keys(), *keywords_tree.values())))
     functions = get_literals("functions")
     datatypes = get_literals("datatypes")
     reserved_words = set(get_literals("reserved"))
+    prio_order = (
+        "keyword",
+        "function",
+        "view",
+        "table",
+        "datatype",
+        "database",
+        "schema",
+        "column",
+        "table alias",
+        "join",
+        "name join",
+        "fk join",
+        "table format",
+    )
 
     def __init__(self, smart_completion=True, settings=None):
         super(SQLCompleter, self).__init__()
@@ -128,7 +146,7 @@ class SQLCompleter(Completer):
             or (name.upper() in self.reserved_words)
             or (name.upper() in self.functions)
         ):
-            name = '"%s"' % name
+            name = "{1}{0}{1}".format(name, self.name_escape_char)
 
         return name
 
@@ -137,7 +155,12 @@ class SQLCompleter(Completer):
 
     def unescape_name(self, name):
         """ Unquote a string."""
-        if name and name[0] == '"' and name[-1] == '"':
+        if (
+            name
+            and len(name) > 1
+            and name[0] == name[-1] == self.name_escape_char
+            and name[-1]
+        ):
             name = name[1:-1]
 
         return name
@@ -304,7 +327,7 @@ class SQLCompleter(Completer):
     def reset_completions(self):
         self.databases = []
         self.search_path = []
-        self.dbmetadata = {"tables": {}, "views": {}, "functions": {}, "datatypes": {}}
+        self.dbmetadata = {"tables": {}, "views": {}, "functions": {}}
         self.all_completions = set(self.keywords + self.functions)
 
     def find_matches(self, text, collection, mode="fuzzy", meta=None):
@@ -326,22 +349,8 @@ class SQLCompleter(Completer):
         """
         if not collection:
             return []
-        prio_order = [
-            "keyword",
-            "function",
-            "view",
-            "table",
-            "datatype",
-            "database",
-            "schema",
-            "column",
-            "table alias",
-            "join",
-            "name join",
-            "fk join",
-            "table format",
-        ]
-        type_priority = prio_order.index(meta) if meta in prio_order else -1
+
+        type_priority = self.prio_order.index(meta) if meta in self.prio_order else -1
         text = last_word(text, include="most_punctuations").lower()
         text_len = len(text)
 
@@ -866,9 +875,10 @@ class SQLCompleter(Completer):
         keywords = self.keywords_tree.keys()
         # Get well known following keywords for the last token. If any, narrow
         # candidates to this list.
-        next_keywords = self.keywords_tree.get(suggestion.last_token, [])
-        if next_keywords:
-            keywords = next_keywords
+        if suggestion.last_token:
+            next_keywords = self.keywords_tree.get(suggestion.last_token, [])
+            if next_keywords:
+                keywords = next_keywords
 
         casing = self.keyword_casing
         if casing == "auto":
@@ -893,6 +903,9 @@ class SQLCompleter(Completer):
         )
         for c in completer.get_completions(document, None):
             yield Match(completion=c, priority=(0,))
+
+    def get_special_matches(self, _, word_before_cursor):
+        return []
 
     def get_datatype_matches(self, suggestion, word_before_cursor):
         # suggest custom datatypes
@@ -923,6 +936,7 @@ class SQLCompleter(Completer):
         Alias: get_alias_matches,
         Database: get_database_matches,
         Keyword: get_keyword_matches,
+        Special: get_special_matches,
         Datatype: get_datatype_matches,
         Path: get_path_matches,
     }
